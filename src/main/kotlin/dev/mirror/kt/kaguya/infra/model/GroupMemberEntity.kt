@@ -11,4 +11,5 @@ class GroupMemberEntity(id: EntityID<UUID>) : UUIDEntity(id) {
 
     var group by GroupEntity referencedOn GroupMembers.group
     var member by UserEntity referencedOn GroupMembers.member
+    var isOni by GroupMembers.isOni
 }

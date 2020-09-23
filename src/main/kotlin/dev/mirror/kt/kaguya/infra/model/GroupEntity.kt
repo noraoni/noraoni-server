@@ -11,5 +11,5 @@ class GroupEntity(id: EntityID<UUID>) : UUIDEntity(id) {
     companion object : UUIDEntityClass<GroupEntity>(Groups)
 
     var joinId by Groups.joinId
-    val members by UserEntity referrersOn GroupMembers.group
+    val members by GroupMemberEntity referrersOn GroupMembers.group
 }

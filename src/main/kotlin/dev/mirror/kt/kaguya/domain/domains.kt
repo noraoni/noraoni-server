@@ -23,8 +23,20 @@ data class PreRegisteredGroup(
 @Serializable
 data class Group(
     val id: UUID,
-    val members: List<User>,
+    val members: List<GroupMember>,
     val joinId: Int
+)
+
+@Serializable
+data class GroupMember(
+    val user: User,
+    val isOni: Boolean
+)
+
+@Serializable
+data class Location(
+    val member: User,
+    val location: Double
 )
 
 @Serializable
@@ -41,7 +53,10 @@ data class WebSocketRequest(
         REGISTER_GROUP,
 
         @SerialName("join_group")
-        JOIN_GROUP
+        JOIN_GROUP,
+
+        @SerialName("location_update")
+        LOCATION_UPDATE,
     }
 }
 
