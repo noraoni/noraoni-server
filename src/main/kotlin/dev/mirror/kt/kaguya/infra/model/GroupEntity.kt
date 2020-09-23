@@ -7,8 +7,8 @@ import org.jetbrains.exposed.dao.UUIDEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
 import java.util.*
 
-class GroupEntity(id: EntityID<UUID>): UUIDEntity(id) {
-    companion object: UUIDEntityClass<GroupEntity>(Groups)
+class GroupEntity(id: EntityID<UUID>) : UUIDEntity(id) {
+    companion object : UUIDEntityClass<GroupEntity>(Groups)
 
-    val members by UserEntity referrersOn  GroupMembers.group
+    val members by UserEntity referrersOn GroupMembers.group
 }

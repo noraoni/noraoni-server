@@ -7,7 +7,7 @@ import org.jetbrains.exposed.dao.id.EntityID
 import java.util.*
 
 class UserEntity(id: EntityID<UUID>) : UUIDEntity(id) {
-    companion object: UUIDEntityClass<UserEntity>(Users)
+    companion object : UUIDEntityClass<UserEntity>(Users)
 
     var name by Users.name
     var icon by Users.icon
