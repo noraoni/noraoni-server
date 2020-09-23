@@ -13,5 +13,6 @@ fun UserEntity.toDomain(): User = User(
 
 fun GroupEntity.toDomain(): Group = Group(
     this.id.value,
-    this.members.map { it.toDomain() }
+    this.members.map { it.toDomain() },
+    this.joinId
 )

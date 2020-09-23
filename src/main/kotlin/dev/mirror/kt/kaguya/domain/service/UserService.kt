@@ -7,7 +7,7 @@ import java.util.*
 class UserService(
     private val repository: UserRepository
 ) {
-    fun register(name: String, iconUrl: String): User {
+    fun register(name: String, iconUrl: String?): User {
         return repository.register(name, iconUrl)
     }
 
