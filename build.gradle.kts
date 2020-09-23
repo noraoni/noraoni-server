@@ -1,6 +1,7 @@
 plugins {
     kotlin("jvm") version "1.4.10"
     kotlin("plugin.serialization") version "1.4.10"
+    application
 }
 
 group = "dev.mirror-kt"
@@ -19,4 +20,8 @@ dependencies {
     implementation("org.jetbrains.exposed:exposed-dao:0.27.1")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.0-RC2")
     implementation("org.koin:koin-ktor:2.1.6")
+}
+
+application {
+    mainClassName = "dev.mirror.kt.kaguya.MainKt"
 }

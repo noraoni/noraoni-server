@@ -9,4 +9,5 @@ object Groups : UUIDTable() {
 object GroupMembers : UUIDTable() {
     val member = reference("member", Users).index()
     val group = reference("group", Groups).index()
+    val isOni = bool("is_oni").default(false)
 }
