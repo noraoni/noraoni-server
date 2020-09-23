@@ -1,4 +1,4 @@
-package dev.mirror.kt.kaguya.domain.table
+package dev.mirror.kt.kaguya.infra.table
 
 import org.jetbrains.exposed.dao.id.UUIDTable
 
