@@ -14,4 +14,8 @@ class GroupService(
         val group = PreRegisteredGroup(listOf(hostUser))
         return groupRepository.register(group)
     }
+
+    fun join(joinId: Int, userId: UUID): Group? {
+        return groupRepository.join(joinId, userId)
+    }
 }
