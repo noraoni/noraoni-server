@@ -1,13 +1,15 @@
 package dev.mirror.kt.kaguya.infra.repository
 
 import dev.mirror.kt.kaguya.domain.Group
+import dev.mirror.kt.kaguya.domain.GroupMember
 import dev.mirror.kt.kaguya.domain.PreRegisteredGroup
+import dev.mirror.kt.kaguya.domain.User
 import dev.mirror.kt.kaguya.domain.repository.GroupRepository
-import dev.mirror.kt.kaguya.infra.model.GroupEntity
-import dev.mirror.kt.kaguya.infra.model.GroupMemberEntity
-import dev.mirror.kt.kaguya.infra.model.UserEntity
+import dev.mirror.kt.kaguya.infra.table.GroupMembers
 import dev.mirror.kt.kaguya.infra.table.Groups
-import dev.mirror.kt.kaguya.infra.toDomain
+import dev.mirror.kt.kaguya.infra.table.Users
+import org.jetbrains.exposed.sql.insert
+import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
 import java.security.SecureRandom
 import java.util.*
@@ -24,40 +26,56 @@ class GroupRepositoryImpl : GroupRepository {
             var joinId: Int
             do {
                 joinId = random.nextInt(JOIN_ID_SIZE)
-                val preEntity = GroupEntity.find { Groups.joinId eq joinId }
+                val preEntity = Groups.select { Groups.joinId eq joinId }
             } while (!preEntity.empty())
 
-            val groupEntity = GroupEntity.new {
-                this.joinId = joinId
-            }
+            val groupId = Groups.insert {
+                it[Groups.joinId] = joinId
+            } get Groups.id
 
             val members = group.members
                 .map {
-                    UserEntity.findById(it.id)
+                    it.id
                 }
 
             for (member in members) {
-                GroupMemberEntity.new(UUID.randomUUID()) {
-                    this.group = groupEntity
-                    this.member = member!!
+                GroupMembers.insert {
+                    it[id] = UUID.randomUUID()
+                    it[this.group] = groupId
+                    it[this.member] = member
                 }
             }
 
-            groupEntity.toDomain()
+            Group(
+                groupId,
+                group.members.map { GroupMember(it, false) },
+                joinId
+            )
         }
     }
 
     override fun join(joinId: Int, userId: UUID): Group? {
         return transaction {
-            val group = GroupEntity.find { Groups.joinId eq joinId }.singleOrNull() ?: return@transaction null
-            val user = UserEntity.findById(userId) ?: return@transaction null
+            val group = Groups.select { Groups.joinId eq joinId }.singleOrNull() ?: return@transaction null
+            val user = Users.select { Users.id eq userId }.singleOrNull() ?: return@transaction null
 
-            GroupMemberEntity.new {
-                this.group = group
-                this.member = user
+            GroupMembers.insert {
+                it[this.group] = group[id]
+                it[member] = user[id]
             }
 
-            group.toDomain()
+            Group(
+                group[Groups.id],
+                Groups.innerJoin(GroupMembers)
+                    .select { Groups.id eq group[Groups.id] }
+                    .map {
+                        GroupMember(
+                            User(it[Users.id], it[Users.name], it[Users.icon]),
+                            false
+                        )
+                    },
+                joinId
+            )
         }
     }
 }
