@@ -78,4 +78,10 @@ class GroupRepositoryImpl : GroupRepository {
             )
         }
     }
+
+    override fun changeMember(member: GroupMember): GroupMember? {
+        val memberEntity = GroupMembers.select { GroupMembers.id eq member.user.id }.singleOrNull() ?: return null
+        memberEntity[GroupMembers.isOni] = member.isOni
+        return member
+    }
 }
