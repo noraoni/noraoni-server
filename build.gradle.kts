@@ -18,6 +18,9 @@ dependencies {
     implementation("io.ktor:ktor-websockets:1.4.0")
     implementation("org.jetbrains.exposed:exposed-core:0.27.1")
     implementation("org.jetbrains.exposed:exposed-dao:0.27.1")
+    implementation("org.jetbrains.exposed:exposed-jdbc:0.27.1")
+    implementation("com.zaxxer:HikariCP:3.4.5")
+    implementation("mysql:mysql-connector-java:8.0.21")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.0-RC2")
     implementation("org.koin:koin-ktor:2.1.6")
 }
