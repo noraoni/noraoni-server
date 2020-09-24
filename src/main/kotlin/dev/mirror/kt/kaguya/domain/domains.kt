@@ -34,10 +34,21 @@ data class GroupMember(
 )
 
 @Serializable
-data class Location(
-    val member: User,
-    val location: Double
+data class Point(
+    val x: Double,
+    val y: Double
 )
+
+@Serializable
+data class Location(
+    val member: GroupMember,
+    val point: Point
+)
+
+enum class AreaType {
+    ONI,
+    PLAYER
+}
 
 @Serializable
 data class WebSocketRequest(
